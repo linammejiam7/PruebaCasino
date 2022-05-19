@@ -34,35 +34,36 @@
                 <label id="mensaje{{ jugador.id }}"></label> <br>
                 {{ jugador.nombre }}
                 {{ jugador.email }}
-                <label id="cartera{{ jugador.id }}">{{ jugador.cantidad_dinero }}</label>                
+                <br>
+                <label id="cartera{{ jugador.id }}">Saldo: {{ jugador.cantidad_dinero }}</label>                
 
                 <br>
 
-                <div id="opcionesApuesta">
-                    <input type="radio" id="rojo" name="apuesta{{ jugador.id }}" value="Rojo">
-                    <label for="rojo">Rojo</label><br>
-                    <input type="radio" id="negro" name="apuesta{{ jugador.id }}" value="Negro">
-                    <label for="negro">Negro</label><br>
-                    <input type="radio" id="verde" name="apuesta{{ jugador.id }}" value="Verde">
-                    <label for="verde">Verde</label>
-                    <br>
-
-                    {% for c in carteraJugadores %} 
-                        {% if(c.id_jugador == jugador.id) %} 
-                            <div>
-                                <input type="number" max="{{ c.max }}" min="{{ c.min }}" id="valorApuesta{{ c.id_jugador }}" name="valorApuesta" pattern="\d+" required/>
-                                <span class="validity"></span>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                    
-                    <br>
-                    <input type="submit" id="iniciarApuesta{{ jugador.id }}" onclick="apuestaJugador({{ jugador.id }}, {{ id_ronda }})" value="Apostar"/>
-                </div>
+                {% if( jugador.cantidad_dinero !=0 ) %} 
+                    <div id="opcionesApuesta">
+                        <input type="radio" id="rojo" name="apuesta{{ jugador.id }}" value="Rojo">
+                        <label for="rojo">Rojo</label><br>
+                        <input type="radio" id="negro" name="apuesta{{ jugador.id }}" value="Negro">
+                        <label for="negro">Negro</label><br>
+                        <input type="radio" id="verde" name="apuesta{{ jugador.id }}" value="Verde">
+                        <label for="verde">Verde</label>
+                        
+                        <br>
+                        
+                        {% for c in carteraJugadores %} 
+                            {% if( c.id_jugador == jugador.id ) %} 
+                                <div>
+                                    <input type="number" max="{{ c.max }}" min="{{ c.min }}" id="valorApuesta{{ c.id_jugador }}" name="valorApuesta" pattern="\d+" required/>
+                                    <span class="validity"></span>
+                                </div>
+                                <br>
+                                <input type="submit" id="iniciarApuesta{{ jugador.id }}" onclick="apuestaJugador({{ jugador.id }}, {{ id_ronda }})" value="Apostar"/>
+                            {% endif %}
+                        {% endfor %}                   
+                    </div>
+                {% endif %} 
                 <br>
             </div>
-            {% else %}
-                No se han encontrado registros
         {% endfor %}
 </div>
 

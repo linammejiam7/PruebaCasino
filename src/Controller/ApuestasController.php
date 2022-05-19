@@ -104,7 +104,10 @@ class ApuestasController extends AbstractController
             $fondos = $jugador->getCantidadDinero();
             $cartera = 0;
 
-            if($apuesta != 0)
+            if($apuesta > $fondos || $apuesta < 0)
+            {
+                return new JsonResponse(['id'=>$id, 'cartera' => $fondos, 'saldo' => 'N']);
+            }elseif($apuesta != 0)
             {
                 //creo registro de la apuesta que hizo el jugador
                 $apuestaJugador = new RondaJugador();
@@ -117,7 +120,7 @@ class ApuestasController extends AbstractController
                 $em->persist($apuestaJugador);
                 $jugador->setCantidadDinero($cartera);
                 $em->flush();
-            }            
+            }          
             
             return new JsonResponse(['id'=>$id, 'cartera' => $cartera]);
         }
