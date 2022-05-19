@@ -32,9 +32,9 @@ Mover SymfonyCLI para que funcione de forma global
 
   `symfony check:requirements`
 
-INSTALAR EXTENSIONES FALTANTES (SI FALTAN):
+instalar mysql:
 
-  `sudo apt install php7.4-nombreextension (por lo general mbstring, xml, mysql, intl, curl)`
+  `sudo apt install php7.4-mysql`
 
 ### Ejecutar el proyecto
 
