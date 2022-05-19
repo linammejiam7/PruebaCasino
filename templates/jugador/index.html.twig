@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello JugadorController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <div class="align-center">
+        <div class="col-6">
+            {% for message in app.flashes('exito') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <h3> Registrar un jugador </h3>
+            {{ form(formulario) }}
+
+            <br>
+
+            <a class="nav-link" href="{{ path('listaJugadores') }}" >Lista de jugadores</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
