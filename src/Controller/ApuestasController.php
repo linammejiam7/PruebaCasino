@@ -46,7 +46,6 @@ class ApuestasController extends AbstractController
                 $carteraJugadores[] = ['id_jugador' => $j['id'],
                                         'min' => $min,
                                         'max' => $max ]; 
-
             }
 
             //obtengo el numero de la ultima ronda
@@ -104,7 +103,35 @@ class ApuestasController extends AbstractController
             $fondos = $jugador->getCantidadDinero();
             $cartera = 0;
 
-            if($apuesta > $fondos || $apuesta < 0)
+            //creo registro de la apuesta que hizo el jugador
+            $apuestaJugador = new RondaJugador();
+            $apuestaJugador->setApuesta($opcion);
+            $apuestaJugador->setJugador($jugador);
+            $apuestaJugador->setRonda($rondaActiva);
+
+            if($fondos <= 1000)
+            {
+                //apuesta todo
+                $apuestaJugador->setDineroApuesta($apuesta);
+                $jugador->setCantidadDinero($cartera);
+                    
+            }else{
+                $min = $fondos * 0.08;
+                $max = $fondos * 0.15;
+
+                if( $apuesta >= $min && $apuesta <= $max)
+                {
+                    //puede apostar
+                    $cartera = $fondos-$apuesta;
+                    $apuestaJugador->setDineroApuesta($apuesta);
+                    $jugador->setCantidadDinero($cartera);
+                }
+            }
+            
+            $em->persist($apuestaJugador);
+            $em->flush();
+
+            if($apuesta > $fondos)
             {
                 return new JsonResponse(['id'=>$id, 'cartera' => $fondos, 'saldo' => 'N']);
             }elseif($apuesta != 0)
@@ -159,7 +186,6 @@ class ApuestasController extends AbstractController
                 {
                     //obtener el valor id del gandor
                     $id_jugador = $ganadores->getJugador()->getId();
-                    $listaGanadores[$i] = $id_jugador;
 
                     //objeto jugador ganador
                     $jugador = $em->getRepository(Jugador::class)->find($id_jugador);
@@ -172,6 +198,7 @@ class ApuestasController extends AbstractController
                         //Verde 2%.
                         $ganancia = ($apuesta*15) + $jugador->getDineroApuesta();          
                     }
+                    $listaGanadores[] = [$id_jugador => $ganancia ]; 
                     
                     $jugador->setCantidadDinero($ganancia);
                     $em->flush();
